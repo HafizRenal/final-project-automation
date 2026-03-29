@@ -4,8 +4,14 @@ Feature: DummyAPI User Management
     Given the API base URL is "https://dummyapi.io/data/v1"
 
   @api
+  Scenario: Get list of users
+    When I send GET request to "/user?limit=5"
+    Then the response status code should be 200
+    And the response should contain field "data"
+
+  @api
   Scenario: Get user by valid ID
-    When I send GET request to "/user/60d0fe4f5311236168a109ca"
+    When I send GET request to "/user/60d0fe4f5311236168a109f3"
     Then the response status code should be 200
     And the response should contain field "firstName"
     And the response should contain field "lastName"
@@ -19,12 +25,12 @@ Feature: DummyAPI User Management
 
   @api
   Scenario: Create a new user
-    When I send POST request to "/user" with body:
+    When I send POST request to "/user/create" with body:
       """
       {
         "firstName": "Hafiz",
         "lastName": "Renal",
-        "email": "hafizrenal.test@example.com"
+        "email": "hafizrenal.final2026@example.com"
       }
       """
     Then the response status code should be 200

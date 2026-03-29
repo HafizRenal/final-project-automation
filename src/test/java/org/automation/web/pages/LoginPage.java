@@ -26,6 +26,7 @@ public class LoginPage {
 
     public void clickSignIn() {
         wait.until(ExpectedConditions.elementToBeClickable(SIGN_IN_BUTTON)).click();
+        try { Thread.sleep(1500); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 
     public void enterUsername(String username) {
@@ -40,11 +41,25 @@ public class LoginPage {
 
     public void submitLogin() {
         wait.until(ExpectedConditions.elementToBeClickable(LOGIN_BUTTON)).click();
+        handleAlertIfPresent();
+        try { Thread.sleep(2000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 
     public String getNavbarUsername() {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(NAVBAR_USERNAME));
-        return driver.findElement(NAVBAR_USERNAME).getText();
+        try {
+
+            wait.until(ExpectedConditions.visibilityOfElementLocated(NAVBAR_USERNAME));
+            return driver.findElement(NAVBAR_USERNAME).getText();
+        } catch (Exception e) {
+            try {
+
+                By welcomeText = By.xpath("//*[contains(text(),'Welcome')]");
+                wait.until(ExpectedConditions.visibilityOfElementLocated(welcomeText));
+                return driver.findElement(welcomeText).getText();
+            } catch (Exception ex) {
+                return "";
+            }
+        }
     }
 
     public boolean isAlertPresent() {
@@ -54,6 +69,16 @@ public class LoginPage {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    private void handleAlertIfPresent() {
+        try {
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(3));
+            shortWait.until(ExpectedConditions.alertIsPresent());
+            driver.switchTo().alert().accept();
+        } catch (Exception e) {
+
         }
     }
 }

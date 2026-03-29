@@ -6,14 +6,14 @@ Feature: Demoblaze Web UI Tests
   @web
   Scenario: Successful login with valid credentials
     When I click on Sign in button
-    And I enter login username "admin" and password "password"
+    And I enter login username "hafizrenal" and password "Test1234"
     And I submit the login form
-    Then I should see the username "admin" in the navbar
+    Then I should see the username "hafizrenal" in the navbar
 
   @web
   Scenario: Failed login with invalid credentials
     When I click on Sign in button
-    And I enter login username "wronguser" and password "wrongpass"
+    And I enter login username "wronguser123" and password "wrongpass123"
     And I submit the login form
     Then I should see an alert message
 
@@ -31,7 +31,7 @@ Feature: Demoblaze Web UI Tests
 
   @web
   Scenario: Add product to cart
-    Given I am logged in with username "admin" and password "password"
+    Given I am logged in with username "hafizrenal" and password "Test1234"
     When I click on "Phones" category
     And I click on the first product
     And I click Add to cart button
