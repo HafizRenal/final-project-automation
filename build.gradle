@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.automation'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+dependencies {
+    // Selenium WebDriver - untuk UI test
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.21.0'
+
+    // WebDriverManager - otomatis download ChromeDriver
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.9.2'
+
+    // Cucumber
+    testImplementation 'io.cucumber:cucumber-java:7.18.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.18.0'
+
+    // JUnit 4
+    testImplementation 'junit:junit:4.13.2'
+
+    // REST Assured - untuk API test
+    testImplementation 'io.rest-assured:rest-assured:5.4.0'
+
+    // JSON untuk parsing response API
+    testImplementation 'org.json:json:20240303'
+}
+
+test {
+    useJUnit()
+}
+
+// ── Gradle Task untuk menjalankan test @api saja ──
+tasks.register('apiTest', Test) {
+    useJUnit {
+        includeCategories 'org.automation.runner.ApiTestRunner'
+    }
+    systemProperty 'cucumber.filter.tags', '@api'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+}
+
+// ── Gradle Task untuk menjalankan test @web saja ──
+tasks.register('webTest', Test) {
+    useJUnit {
+        includeCategories 'org.automation.runner.WebTestRunner'
+    }
+    systemProperty 'cucumber.filter.tags', '@web'
+    testClassesDirs = sourceSets.test.output.classesDirs
+    classpath = sourceSets.test.runtimeClasspath
+}
