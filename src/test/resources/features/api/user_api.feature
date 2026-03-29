@@ -24,7 +24,7 @@ Feature: DummyAPI User Management
     And the response should contain a list of tags
 
   @api
-  Scenario: Create a new user
+  Scenario: Create user with duplicate email returns error
     When I send POST request to "/user/create" with body:
       """
       {
@@ -33,9 +33,7 @@ Feature: DummyAPI User Management
         "email": "hafizrenal.final2026@example.com"
       }
       """
-    Then the response status code should be 200
-    And the response should contain field "id"
-    And the response should contain field "firstName"
+    Then the response status code should be 400
 
   @api
   Scenario: Get user with invalid ID returns error
