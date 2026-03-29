@@ -53,4 +53,32 @@ public class UserApiSteps {
         assertFalse("List tags kosong",
                 response.jsonPath().getList("data").isEmpty());
     }
+
+    // BARU: validasi nilai spesifik dari field response
+    @Then("the response field {string} should have value {string}")
+    public void theResponseFieldShouldHaveValue(String field, String expectedValue) {
+        String actualValue = response.jsonPath().getString(field);
+        assertEquals(
+                "Field '" + field + "' expected '" + expectedValue + "' but got '" + actualValue + "'",
+                expectedValue,
+                actualValue
+        );
+    }
+
+    // BARU: validasi response time agar API tidak terlalu lambat
+    @Then("the response time should be less than {int} milliseconds")
+    public void theResponseTimeShouldBeLessThan(int maxMs) {
+        long actualTime = response.getTime();
+        assertTrue(
+                "Response terlalu lambat: " + actualTime + "ms, batas maksimal: " + maxMs + "ms",
+                actualTime < maxMs
+        );
+    }
+
+    // BARU: validasi jumlah data dalam list
+    @Then("the response data list should not be empty")
+    public void theResponseDataListShouldNotBeEmpty() {
+        assertNotNull("Field 'data' tidak ada", response.jsonPath().getList("data"));
+        assertFalse("List data kosong", response.jsonPath().getList("data").isEmpty());
+    }
 }

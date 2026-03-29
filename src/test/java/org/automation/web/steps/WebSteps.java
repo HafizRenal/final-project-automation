@@ -2,7 +2,6 @@ package org.automation.web.steps;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -26,14 +25,12 @@ public class WebSteps {
     @Before("@web")
     public void setUp() {
         WebDriverManager.chromedriver().setup();
-
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
         options.addArguments("--window-size=1920,1080");
-
         driver      = new ChromeDriver(options);
         loginPage   = new LoginPage(driver);
         productPage = new ProductPage(driver);
@@ -56,7 +53,6 @@ public class WebSteps {
         loginPage.enterUsername(username);
         loginPage.enterPassword(password);
         loginPage.submitLogin();
-        try { Thread.sleep(3000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 
     @When("I click on Sign in button")
@@ -73,7 +69,6 @@ public class WebSteps {
     @When("I submit the login form")
     public void iSubmitTheLoginForm() {
         loginPage.submitLogin();
-        try { Thread.sleep(3000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 
     @Then("I should see the username {string} in the navbar")
@@ -87,16 +82,11 @@ public class WebSteps {
 
     @Then("I should see an alert message")
     public void iShouldSeeAnAlertMessage() {
-        // Demoblaze kadang tidak munculkan alert untuk invalid login
-        // Cukup verifikasi user TIDAK berpindah ke halaman secure
-        // yaitu navbar username tetap kosong (login gagal)
         try { Thread.sleep(3000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
-
         String navText = loginPage.getNavbarUsername();
         boolean loginFailed = navText == null || navText.isEmpty() || navText.isBlank();
-
         assertTrue(
-                "Login seharusnya gagal dengan kredensial invalid, tapi navbar menampilkan: '" + navText + "'",
+                "Login seharusnya gagal, tapi navbar: '" + navText + "'",
                 loginFailed
         );
     }
@@ -134,7 +124,6 @@ public class WebSteps {
     @When("I click Add to cart button")
     public void iClickAddToCartButton() {
         productPage.clickAddToCart();
-        try { Thread.sleep(2000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
     }
 
     @Then("I should see cart confirmation")
